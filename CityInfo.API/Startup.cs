@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CityInfo.API.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -22,8 +23,7 @@ namespace CityInfo.API
                 {
                     o.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());//to configure output format
                 });
-            
-            
+
             //services.AddMvc().AddJsonOptions(o =>   // to serialize to /deserialize from Json by default
             //{
             //    if (o.SerializerSettings.ContractResolver != null)
@@ -32,6 +32,11 @@ namespace CityInfo.API
             //        castedResolver.NamingStrategy = null;
             //    }
             //});
+#if DEBUG
+            services.AddTransient<IMailService,LocalMailService>();
+#else
+            services.AddTransient<IMailService, CloudMailService>();
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
