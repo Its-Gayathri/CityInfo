@@ -21,7 +21,7 @@ namespace CityInfo.API.Controllers
         public IActionResult GetPointsOfInterest(int cityId)//returns all points for interest from one city
         {
             try
-            {
+            {                
                 var city = CitiesDataStore.Current.Cities.FirstOrDefault(x => x.Id == cityId);
                 if (city == null)
                 {
