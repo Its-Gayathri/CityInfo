@@ -65,6 +65,34 @@ namespace CityInfo.API.Controllers
             city.PointsOfInterest.Add(finalpointOfInterest);
             return CreatedAtRoute("GetPointOfInterest", new { cityId, id = finalpointOfInterest.Id }, finalpointOfInterest);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdatePointOfInterest(int cityId,int id, [FromBody] PointOfInterestForUpdateDto pointOfInterest)
+        {
+            if (pointOfInterest.Description.ToLower() == pointOfInterest.Name.ToLower())
+            {
+                ModelState.AddModelError("Description", "The description must be different from Name");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+            if (city == null)
+            {
+                return NotFound();
+            }
+            var pointOfInterestFromStore = city.PointsOfInterest.FirstOrDefault(a => a.Id == id);
+            if(pointOfInterestFromStore == null)
+            {
+                return NotFound();
+            }
+            pointOfInterestFromStore.Name = pointOfInterest.Name;
+            pointOfInterestFromStore.Description = pointOfInterest.Description;
+
+            return NoContent(); //204
+        }
     }
 }
 // [FromBody] attribute is used to specify that the value should be read from the body of the request.
+//get city based on cityId, then get PoointofInterest based on the city and pointOfInterest Id
