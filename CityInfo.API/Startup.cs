@@ -1,8 +1,10 @@
-﻿using CityInfo.API.Services;
+﻿using CityInfo.API.Contexts;
+using CityInfo.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -33,11 +35,17 @@ namespace CityInfo.API
             //    }
             //});
 #if DEBUG
+            services.AddTransient<IMailService, LocalMailService>();
+#else                     
             services.AddTransient<IMailService, CloudMailService>();
-#else
-           
-            services.AddTransient<IMailService,LocalMailService>();
 #endif
+           //var connectionString = @".\SQLExpress;Database=CityInfoDB;Trusted_Connection=True;";
+            var connectionString = @"data source = SGZ - IN01191\SQLEXPRESS; initial catalog = master; trusted_connection = true;";
+           // var connectionString = @"Data Source=.\sqlexpress;InitialCatalog=AddressDb;IntegratedSecurity=True";
+            services.AddDbContext<CityInfoContext>(o=>
+                {
+                    o.UseSqlServer(connectionString);
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
