@@ -4,14 +4,22 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace CityInfo.API
 {
     public class Startup
     {
+        public IConfiguration _configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(_configuration));
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc()
@@ -33,9 +41,8 @@ namespace CityInfo.API
 #else
             services.AddTransient<IMailService, CloudMailService>();
 #endif
-            //var connectionString = @".\SQLExpress;Database=CityInfoDB;Trusted_Connection=True;";
-            var connectionString = @"data source=SGZ-IN01191\SQLEXPRESS;initial catalog=CityInfoDB;trusted_connection=true;";
-           // var connectionString = @"Data Source=.\sqlexpress;InitialCatalog=AddressDb;IntegratedSecurity=True";
+            var connectionString = _configuration["ConnectionStrings:cityInfoDBConnectionString"];
+           // var connectionString = @"data source=SGZ-IN01191\SQLEXPRESS;initial catalog=CityInfoDB;trusted_connection=true;";
             services.AddDbContext<CityInfoContext>(o=>
                 {
                     o.UseSqlServer(connectionString);
