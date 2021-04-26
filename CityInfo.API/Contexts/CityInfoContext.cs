@@ -10,7 +10,7 @@ namespace CityInfo.API.Contexts
 
         public CityInfoContext(DbContextOptions<CityInfoContext> options) : base(options)
         {
-            Database.EnsureCreated(); //checks id Db is created , if not it will create for you 
+            //Database.EnsureCreated(); //checks id Db is created , if not it will create for you 
         }
         //--Configuring DbContext to Sql server-- one way
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

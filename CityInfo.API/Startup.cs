@@ -2,15 +2,9 @@
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CityInfo.API
 {
@@ -36,11 +30,11 @@ namespace CityInfo.API
             //});
 #if DEBUG
             services.AddTransient<IMailService, LocalMailService>();
-#else                     
+#else
             services.AddTransient<IMailService, CloudMailService>();
 #endif
-           //var connectionString = @".\SQLExpress;Database=CityInfoDB;Trusted_Connection=True;";
-            var connectionString = @"data source = SGZ - IN01191\SQLEXPRESS; initial catalog = master; trusted_connection = true;";
+            //var connectionString = @".\SQLExpress;Database=CityInfoDB;Trusted_Connection=True;";
+            var connectionString = @"data source=SGZ-IN01191\SQLEXPRESS;initial catalog=CityInfoDB;trusted_connection=true;";
            // var connectionString = @"Data Source=.\sqlexpress;InitialCatalog=AddressDb;IntegratedSecurity=True";
             services.AddDbContext<CityInfoContext>(o=>
                 {
